@@ -4,8 +4,6 @@ node {
         echo "Hello jenkkins"
     }
     stage ('AWS sync up') {
-        withCredentials( credentialsId: 'MESG AWS') {
-            AWS("--region=eu-west-2 s3 ls")
-        }
+        sh "ls"
     }
 }
