@@ -3,4 +3,9 @@ node {
     stage ('echo') {
         echo "Hello jenkkins"
     }
+    stage ('AWS sync up') {
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'MESG AWS', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+        AWS("--region=eu-west-2 s3 ls")
+    }
+    
 }
