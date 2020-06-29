@@ -5,7 +5,7 @@ node {
     }
     stage ('AWS sync up') {
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'MESG AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh 'aws s3 ls s3://mesg001'
+            sh 'aws s3 sync . s3://mesgbucket/folder1'
         }
     }
 }
