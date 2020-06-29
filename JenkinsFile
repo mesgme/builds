@@ -9,4 +9,11 @@ node {
             sh 'AWS_DEFAULT_REGION=eu-west-2 aws s3 sync $WORKSPACE s3://mesgbucket/folder1'
         }
     }
+    stage ('EC2 sync down'){
+        withCredentials([sshUserPrivateKey(credentialsId: 'aws_ec2')]) {
+            sh 'ssh 35.179.47.76 <<- EOF
+                ls
+            EOF'
+        }
+    }
 }
