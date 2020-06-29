@@ -11,9 +11,9 @@ node {
     }
     stage ('EC2 sync down'){
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ec2')]) {
-            sh 'ssh 35.179.47.76 <<- EOF
-                ls
-            EOF'
+sh 'ssh 35.179.47.76 << EOF
+ls
+EOF'
         }
     }
 }
