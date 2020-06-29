@@ -12,7 +12,7 @@ node {
     stage ('EC2 sync down'){
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ec2', keyFileVariable: 'KEYPATH', usernameVariable: 'EC2USER')]) {
  
-            sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no 35.179.47.76 ls'
+            sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no 18.132.210.135 ls'
         }
     }
 }
