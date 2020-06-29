@@ -4,6 +4,8 @@ node {
         echo "Hello jenkkins"
     }
     stage ('AWS sync up') {
-        sh 'aws s3 ls s3://mesg001'
+        withAWS(credentials: 'MESG AWS'){
+            sh 'aws s3 ls s3://mesg001'
+        }
     }
 }
