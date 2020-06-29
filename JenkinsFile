@@ -4,6 +4,6 @@ node {
         echo "Hello jenkkins"
     }
     stage ('AWS sync up') {
-        sh "ls"
+        sh 'aws s3 ls s3://mesg001'
     }
 }
