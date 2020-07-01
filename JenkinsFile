@@ -5,7 +5,7 @@ node {
         string(defaultValue: 'true', description: 'Name of the plugin', name: 'pluginName')
     }
     stage ('AWS sync up') {
-        git 'https://github.com/mesgme/builds.git'
+        git '$repo'
         
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'MESG AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
             sh 'AWS_DEFAULT_REGION=$region aws s3 sync $WORKSPACE s3://$env-pluginstore-$region/$pluginName'
@@ -13,8 +13,7 @@ node {
     }
     stage ('EC2 sync down'){
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ec2', keyFileVariable: 'KEYPATH', usernameVariable: 'EC2USER')]) {
- //35.178.192.242 
- //eu-west-2
+
            sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no $server  "AWS_DEFAULT_REGION=$region aws s3 sync s3://$env-pluginstore-$region/$pluginName /opt/dynatrace/remotepluginmodule/plugin_deployment/$pluginName"'
     
         }
