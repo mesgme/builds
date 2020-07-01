@@ -6,7 +6,7 @@ node {
     stage ('AWS sync up') {
         git 'https://github.com/mesgme/builds.git'
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'MESG AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh 'AWS_DEFAULT_REGION=eu-west-2 aws s3 sync $WORKSPACE s3://mesgbucket/folder1'
+            sh 'AWS_DEFAULT_REGION=eu-west-2 aws s3 sync $WORKSPACE s3://pluginstore-eu-west-2/plugin11'
         }
     }
     stage ('EC2 sync down'){
