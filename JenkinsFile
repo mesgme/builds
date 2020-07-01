@@ -3,16 +3,20 @@ node {
     stage ('echo') {
         echo "Hello jenkkins"
     }
+    parameters{
+        string(defaultValue: true, description: 'Name of the plugin', name: 'pluginName')
+    }
     stage ('AWS sync up') {
         git 'https://github.com/mesgme/builds.git'
+        
         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'MESG AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh 'AWS_DEFAULT_REGION=eu-west-2 aws s3 sync $WORKSPACE s3://pluginstore-eu-west-2/plugin11'
+            sh 'AWS_DEFAULT_REGION=eu-west-2 aws s3 sync $WORKSPACE s3://pluginstore-eu-west-2/${params.pluginName}'
         }
     }
     stage ('EC2 sync down'){
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ec2', keyFileVariable: 'KEYPATH', usernameVariable: 'EC2USER')]) {
  
-           sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no 35.178.192.242  "AWS_DEFAULT_REGION=eu-west-2 aws s3 sync s3://pluginstore-eu-west-2/plugin11 /opt/dynatrace/remotepluginmodule/plugin_deployment/plugin1"'
+           sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no 35.178.192.242  "AWS_DEFAULT_REGION=eu-west-2 aws s3 sync s3://pluginstore-eu-west-2/${params.pluginName} /opt/dynatrace/remotepluginmodule/plugin_deployment/${params.pluginName}"'
     
         }
     }
