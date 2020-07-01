@@ -3,16 +3,16 @@ node {
     stage ('echo') {
         echo "Hello jenkkins"
     }
-    stage ('AWS sync up') {
-        git 'https://github.com/mesgme/builds.git'
-        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'MESG AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-            sh 'AWS_DEFAULT_REGION=eu-west-2 aws s3 sync $WORKSPACE s3://pluginstore-eu-west-2/plugin11'
-        }
-    }
+    // stage ('AWS sync up') {
+    //     git 'https://github.com/mesgme/builds.git'
+    //     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'MESG AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+    //         sh 'AWS_DEFAULT_REGION=eu-west-2 aws s3 sync $WORKSPACE s3://pluginstore-eu-west-2/plugin11'
+    //     }
+    // }
     stage ('EC2 sync down'){
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ec2', keyFileVariable: 'KEYPATH', usernameVariable: 'EC2USER')]) {
  
-            sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no 35.178.192.242 ls'
+            sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no "AWS_DEFAULT_REGION=eu-west-2 aws s3 sync $WORKSPACE s3://pluginstore-eu-west-2/plugin11"'
         }
     }
 }
