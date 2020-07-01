@@ -1,8 +1,6 @@
 // This shows a simple build wrapper example, using the AnsiColor plugin.
 node {
-    stage ('echo') {
-        echo "Hello jenkkins"
-    }
+
     parameters{
         string(defaultValue: 'true', description: 'Name of the plugin', name: 'pluginName')
     }
@@ -17,7 +15,7 @@ node {
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ec2', keyFileVariable: 'KEYPATH', usernameVariable: 'EC2USER')]) {
  //35.178.192.242 
  //eu-west-2
-           sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no $server  "AWS_DEFAULT_REGION=$region aws s3 sync s3://pluginstore-$region/$pluginName /opt/dynatrace/remotepluginmodule/plugin_deployment/$pluginName"'
+           sh 'ssh -l $EC2USER -i $KEYPATH -o StrictHostKeyChecking=no $server  "AWS_DEFAULT_REGION=$region aws s3 sync s3://$env-pluginstore-$region/$pluginName /opt/dynatrace/remotepluginmodule/plugin_deployment/$pluginName"'
     
         }
     }
